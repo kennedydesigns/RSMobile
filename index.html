@@ -8,10 +8,6 @@
 	</head>
 	<body>
 
-	<div id="formParent" style="width:320px;height:460px;border:1px solid #969696; margin:50px;display:none">
-		<div id="formContainer" style='width:100%; height:100%;'>
-		</div>
-	</div>
 
 	<script>
 	var form = { 
@@ -57,14 +53,11 @@
 		]
 	}
     
-	if(!dhx.env.mobile||navigator.userAgent.indexOf("iPad")!=-1){
-		app.container = "formContainer";
-		document.getElementById("formParent").style.display = ""
-	}
+
 		
 	dhx.ready(function(){
 		/*initialization of app*/
-		dhx.ui.fullScreen();
+
 	    dhx.ui(app);
 	 });
 	 
