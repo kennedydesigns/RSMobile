@@ -11,58 +11,96 @@
 	<body>
 
 	<script type="text/javascript" charset="utf-8">
-	var source;
-
-
-	dhx.ready(function(){
+	//Proxy
+	var source; //Customer List
+	var source2; //Route Schedule
 	
+	
+	//Data Processor
+	var dp; //Customer List
+	var dp2; //Route Schedule
+	
+	
+	dhx.ready(function(){
+		//Customer List
 		source = new dhx.proxy({
 			url: "http://mycustomerconnect.com/rsnew1/customers.php",
 			storage: dhx.storage.local
 		});
 		
+		//Route Schedule
+		source2 = new dhx.proxy({
+			url: "http://mycustomerconnect.com/rsnew1/routes.php",
+			storage: dhx.storage.local
+		});
+		
+		//App Start---------------------------->
 		dhx.ui({
             rows:[
-					{ 	
+					{ //Main App ToolBar	
 						view:"toolbar", 
 						type:"MainBar", 
 						elements:[
 							{view:"label", label: "RouteStar <sup class='tb_sup'>mobile</sup>", align:'center'},
-							{view:"button", id:"button1", type:"prev", label: "Back", align:"right", inputWidth:100, click: "showCustomers();"}
+							
 						]
 					},
-					{
-						view:"toolbar", 
-						type:"SubBar", 
-						elements:[
-							{
-							   id: "filter",
-							   view: "text",
-							   label: "<div class='dhx_el_icon'><div class='dhx_el_icon_search' style='margin: 5px 0'></div></div>",
-							   labelWidth: 30
-							}
-						]
-					},
-                    {
+
+                    {//Tabbed Nav
 						gravity:2,  
                         view:"multiview",
                         cells:[    
                                 {
-                                    id:"home",
+                                    id:"home",  //Home Screen
                                     view:"dataview",
                                     url:"",
                                     datatype:"xml",
                                     template:"#name#",
                                     select:true
                                 },
-                                {   id:"customers",
+								{	id:"customers", //Customer List
+								rows:[
+										{	
+											view:"toolbar", 
+											type:"SubBar", 
+											elements:[
+												{
+												   id: "filter",
+												   view: "text",
+												   label: "<div class='dhx_el_icon'><div class='dhx_el_icon_search' style='margin: 5px 0'></div></div>",
+												   labelWidth: 30
+												}
+											]
+										},
+										{   id:"customerlist",
+											view:"list",
+											url: source,
+											template:"#Name#",
+											select:true
+										},
+								]},
 								
-                                    view:"list",
-									url: source,
-                                    template:"#Name#",
-                                    select:true
-                                },
-								{ 	id:"customerdetail",
+								{	id:"routes", //Route Schedule
+									rows:[
+										 {   id:"routeschedule",  
+											view:"unitlist",
+											select:true,
+											url: source2,
+											datatype:"json",
+											sort:{
+														 by:"#AssignedtoDate#"
+													  },
+											uniteBy:function(obj){
+												return obj.AssignedToDay+" - "+obj.AssignedtoDate;
+											},
+
+											template:"(#Stop# - #Week#) #FullName#"
+
+										}
+										
+										
+								]},
+								{ 	id:"customerdetail", // Customer Detail
                                     view:"form", elements:[
                                         { view:"text", label:"Name", id:"Name"},
                                         { view:"text", label:"Phone",  id:"Phone"},
@@ -74,7 +112,7 @@
                         ]
                     },
                     { 
-                        view:"toolbar", 
+                        view:"toolbar",  //Footer Bar
                         id:"BottomBar", type:"BottomBar",
                         elements:[
                             { view:"tabbar", id:'tabbar', selected: 'home', multiview:true, inputWidth:300, options: [
@@ -89,30 +127,42 @@
     			]
 		});
 		
-
-		var dp = new dhx.DataProcessor({
-					master:$$('customers'),
+		//Customer List
+		dp = new dhx.DataProcessor({
+					master:$$('customerlist'),
 					url: source
 				});
 				
-		$$('customerdetail').bind($$('customers'));	
+		//Route Schedule		
+		dp2 = new dhx.DataProcessor({
+					master:$$('routeschedule'),
+					url: source2
+				});	
 
-		$$("customers").attachEvent("onafterselect",function(id){
+		//Attach detail form to list.
+		$$('customerdetail').bind($$('customerlist'));	
+
+		
+		//On Customer List Click go to Customer Detail
+		$$("customerlist").attachEvent("onafterselect",function(id){
 			$$("customerdetail").show();
 		})
+		
+		//Enable Browser Back Button
+		dhx.history.start();
 
+		
+		//Customer List Search Box
 		dhx.extend($$('filter'),dhx.KeyEvents);
 		$$('filter').attachEvent("onTimedKeyPress", function(){
 			var text = $$("filter").getValue();
 				
-			$$("customers").filter("#Name#",text);
+			$$("customerlist").filter("#Name#",text);
 		});
+		
+		
 	 });
-	function showCustomers(){
-	
-		$$("customers").show();
-	
-	}
+
 	</script>
 	</body>
 </html>
