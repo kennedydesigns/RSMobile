@@ -104,7 +104,8 @@
                                     view:"form", elements:[
                                         { view:"text", label:"Name", id:"Name"},
                                         { view:"text", label:"Phone",  id:"Phone"},
-                                        { view:"text", label:"Contact", id:"Contact"}
+                                        { view:"text", label:"Contact", id:"Contact"},
+										{ view:"button", type:"form", label:"Save", click:"save();" }
                                        
                                     ]
                                 }
@@ -162,7 +163,11 @@
 		
 		
 	 });
-
+	function save(){
+		$$('customerdetail').save();
+	
+	
+	}
 	</script>
 	</body>
 </html>
