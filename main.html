@@ -5,8 +5,6 @@
 		<meta  name = "viewport" content = "initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no">
 		<link rel="STYLESHEET" type="text/css" href="libs/touchui.css">
 		<script src="libs/touchui.js" type="text/javascript"></script>
-		<script src="libs/dhxscheduler_mobile.js" type="text/javascript"></script>
-		<link rel="STYLESHEET" type="text/css" href="libs/dhxscheduler_mobile.css">
 	</head>
 	<body>
 
@@ -14,11 +12,12 @@
 	//Proxy
 	var source; //Customer List
 	var source2; //Route Schedule
-	var source3;
+	var source3;  //Task List
 	
 	//Data Processor
 	var dp; //Customer List
 	var dp2; //Route Schedule
+	var dp3; //Task List
 	
 	dhx.ready(function(){
 		//Customer List
@@ -33,6 +32,7 @@
 			storage: dhx.storage.local
 		});
 		
+		//Task List
 		source3 = new dhx.proxy({
 			url: "http://mycustomerconnect.com/rsnew1/events.php",
 			storage: dhx.storage.local
@@ -84,7 +84,7 @@
 											select:true
 										},
 								]},
-								
+
 								{	id:"routes", //Route Schedule
 									rows:[
 										 {   id:"routeschedule",  
@@ -105,6 +105,23 @@
 										
 										
 								]},
+								{	id:"tasks", //Task List
+								rows:[
+										{	
+											view:"toolbar", 
+											type:"SubBar", 
+											elements:[
+												{ view:"button", id:"calendar", type:"round", label: "Schedule View", inputWidth:200, align:"center", click: "viewCalendar();"}
+											]
+										},
+										{ id:"tasklist",  
+											view:"list",
+											url: source3,
+											template:"#text#",
+											select:true
+
+										},
+								]},
 								{ 	id:"customerdetail", // Customer Detail
                                     view:"form", elements:[
                                         { view:"text", label:"Name", id:"Name"},
@@ -113,12 +130,8 @@
 										{ view:"button", type:"form", label:"Save", click:"save();" }
                                        
                                     ]
-                                },
-								{	id: "scheduler",
-									view: "scheduler",
-									save: source3
-								}
-
+                                }
+								
                         ]
                     },
                     { 
@@ -129,7 +142,7 @@
                             	{ label: 'Home', src: 'images/tabbar/home.png', value: 'home'},
                             	{ label: 'Customers', src: 'images/tabbar/customers.png', value: 'customers'},
                             	{ label: 'Routes', src: 'images/tabbar/routes.png', value: 'routes'},
-								{ label: 'Tasks', src: 'images/tabbar/invoices.png', value: 'scheduler'}
+								{ label: 'Tasks', src: 'images/tabbar/invoices.png', value: 'tasks'}
 								
                             	]
 							}
@@ -149,12 +162,16 @@
 					master:$$('routeschedule'),
 					url: source2
 				});	
+			
+		//Task List		
+		dp3 = new dhx.DataProcessor({
+					master:$$('tasklist'),
+					url: source3
+				});
 				
-
 		//Attach detail form to list.
 		$$('customerdetail').bind($$('customerlist'));	
 
-		$$("scheduler").load(source3, "json");
 		
 		//On Customer List Click go to Customer Detail
 		$$("customerlist").attachEvent("onafterselect",function(id){
@@ -177,6 +194,11 @@
 	 });
 	function save(){
 		$$('customerdetail').save();
+	
+	
+	}
+	function viewCalendar(){
+		window.location = "scheduleview.html";
 	
 	
 	}
