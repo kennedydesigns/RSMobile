@@ -130,6 +130,17 @@
 										{ view:"button", type:"form", label:"Save", click:"save();" }
                                        
                                     ]
+                                },
+								{ 	id:"taskdetail", // Customer Detail
+                                    view:"form", elements:[
+                                        { view:"text", label:"Task #", id:"TicklerID"},
+                                        { view:"text", label:"Customer",  id:"FullName"},
+                                        { view:"text", label:"Due Date", id:"DueDate"},
+										{ view:"label", label: "Description", inputWidth:100, align:"left"},
+										{ view:"textarea", id:"details"},
+										{ view:"button", type:"form", label:"Save", click:"save();" }
+                                       
+                                    ]
                                 }
 								
                         ]
@@ -172,10 +183,15 @@
 		//Attach detail form to list.
 		$$('customerdetail').bind($$('customerlist'));	
 
+		$$('taskdetail').bind($$('tasklist'));	
 		
 		//On Customer List Click go to Customer Detail
 		$$("customerlist").attachEvent("onafterselect",function(id){
 			$$("customerdetail").show();
+		})
+		
+		$$("tasklist").attachEvent("onafterselect",function(id){
+			$$("taskdetail").show();
 		})
 		
 		//Enable Browser Back Button
