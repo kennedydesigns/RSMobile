@@ -10,7 +10,8 @@
 	<body>
 
 	<script type="text/javascript" charset="utf-8">
-	var source = new dhx.proxy({
+	
+			var source = new dhx.proxy({
 				url: "http://mycustomerconnect.com/rsnew1/events.php",
 				storage: dhx.storage.local
 			});
@@ -43,7 +44,20 @@
 				});
 				
 				$$("scheduler").load(source, "json");
-
+				
+				
+				$$("scheduler").data.attachEvent("onAfterAdd",function(id){
+					dhx.alert("Item '"+this.item(id).text+"' has been added");
+				});
+				$$("scheduler").data.attachEvent("onAfterDelete",function(id){
+					dhx.alert("Item has been deleted");
+					return true;
+				});
+				$$("scheduler").data.attachEvent("onStoreUpdated",function(id,item,operation){
+					if(operation == "update")
+						dhx.alert("Item '"+this.item(id).text+"' has been updated");
+					return true;
+				});
 				
 			});
 			function viewTasks(){
