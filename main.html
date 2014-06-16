@@ -5,7 +5,15 @@
 		<meta  name = "viewport" content = "initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no">
 		<link rel="STYLESHEET" type="text/css" href="libs/touchui.css">
 		<script src="libs/touchui.js" type="text/javascript"></script>
+		<style>
+			.savetask{
+				padding-top: 50px;
+			
+			
+			}
+		</style>
 	</head>
+	
 	<body>
 
 	<script type="text/javascript" charset="utf-8">
@@ -137,8 +145,8 @@
                                         { view:"text", label:"Customer",  id:"FullName"},
                                         { view:"text", label:"Due Date", id:"DueDate"},
 										{ view:"label", label: "Description", inputWidth:100, align:"left"},
-										{ view:"textarea", id:"details"},
-										{ view:"button", type:"form", label:"Save", click:"save();" }
+										{ view:"textarea", id:"details", height:100 },
+										{ view:"button", type:"form", label:"Save", css:"savetask", click:"save();" }
                                        
                                     ]
                                 }
